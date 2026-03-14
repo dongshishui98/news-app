@@ -32,12 +32,12 @@ col1, col2, col3 = st.columns(3)
 with col1:
     topic = st.selectbox(
         "Topic:",
-        ["美以伊战争", "AI", "股市原油", "科技", "国际", "国内"],
+        ["科技", "国际", "国内", "AI", "股市原油"],
         index=0
     )
 
 with col2:
-    keywords = st.text_input("Keywords:", value="伊朗,以色列,美以,中东,霍尔木兹")
+    keywords = st.text_input("Keywords:", value="")
 
 with col3:
     count = st.number_input("Number:", min_value=5, max_value=20, value=10)

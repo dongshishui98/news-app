@@ -81,19 +81,18 @@ def crawl_news(topic, keywords, count=10):
     print(f"\n开始爬取: {topic}, 数量: {count}")
 
     topic_map = {
-        "美以伊战争": "https://news.163.com/special/cm_guoji/",
-        "AI": "https://news.163.com/special/cm_tech/",
-        "股市原油": "https://news.163.com/special/cm_stock/",
         "科技": "https://news.163.com/special/cm_tech/",
         "国际": "https://news.163.com/special/cm_guoji/",
         "国内": "https://news.163.com/special/cm_guonei/",
+        "AI": "https://news.163.com/special/cm_tech/",
+        "股市原油": "https://news.163.com/special/cm_stock/",
     }
 
-    url = topic_map.get(topic, topic_map["国际"])
+    url = topic_map.get(topic, topic_map["科技"])
     results = []
 
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=15)
         news_list = parse_jsonp(response.text)
 
         if not news_list:
@@ -103,7 +102,10 @@ def crawl_news(topic, keywords, count=10):
         filtered = []
         for news in news_list:
             title = news.get('title', '')
-            if any(kw in title for kw in keywords):
+            # 如果有关键词就筛选，没有就返回所有
+            if keywords and any(kw in title for kw in keywords):
+                filtered.append(news)
+            elif not keywords:
                 filtered.append(news)
 
         print(f"筛选到 {len(filtered)} 条新闻")
